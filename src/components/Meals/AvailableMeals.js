@@ -12,6 +12,10 @@ const AvailableMeals = () => {
   useEffect(async () => {
     const fetchMeals = async () => {
       const response = await fetch('https://react-food-app-with-fb-default-rtdb.firebaseio.com/meals.json');
+     if (!response.ok) {
+       throw new Error('Something went wrong!');
+     }
+      
       const responseData = await response.json();
 
       const loadedMeals = [];
@@ -29,7 +33,13 @@ const AvailableMeals = () => {
       setMeals(loadedMeals);
       setIsLoading(false);
     };
+    try {
     fetchMeals();
+    }
+    catch {
+      setIsLoading(false);
+      setHttpError(error.message);  
+    }
   }, []);
 
   if (isLoading) {
